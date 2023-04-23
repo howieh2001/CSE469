@@ -111,9 +111,11 @@ class Blockchain:
     def __init__(self):
         self.blocks_file = 'blocks.bin'
         if os.path.exists(self.blocks_file):
+            print("Blockchain file found with INITIAL block.")
             with open(self.blocks_file, 'rb') as f:
                 self.chain = pickle.load(f)
         else:
+            print("Blockchain file not found. Created INITIAL block.")
             self.chain = [self.create_genesis_block()]
             with open(self.blocks_file, 'wb') as f:
                 pickle.dump(self.chain, f)
