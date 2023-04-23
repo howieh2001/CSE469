@@ -217,6 +217,55 @@ class runProgram:
 if __name__ == '__main__':
     blockchain = Blockchain()
 
+     ### DEBUGGING without using user inputs
+    case_id = '65cc391d-6568-4dcc-a3f1-86a2f04140f3' # input
+    
+    ids = [12345, 34567] #info taken from input
+    case = Case(case_id)
+    case.add(ids)
+    blockchain.add_block(case) 
+    print("\n")
+
+    ids = [678]
+    case.add(ids)
+    blockchain.add_block(case) 
+    print("\n")
+    
+    ids = [998]
+    case.add(ids)
+    blockchain.add_block(case) 
+    print("\n")
+    
+    case.checkout(678)
+    print("\n")
+
+    ids = [34567, 66666] # first id already added
+    case.add(ids)
+    blockchain.add_block(case) 
+    print("\n")
+
+    ids = [11, 11] # same id added twice
+    case.add(ids)
+    blockchain.add_block(case) 
+    print("\n")
+
+    case.checkout(998)
+    print("\n")
+    case.checkout(678) # already checked out
+    print("\n")
+    case.checkin(998)
+    print("\n")
+    case.checkout(998)
+    print("\n")
+
+    case.remove(34567, "RELEASED", "john doe")
+    print("\n")
+    case.remove(11, "DISPOSED", "null")
+    print("\n")
+    case.remove(998, "RELEASED", "null")
+    print("\n")
+    ###
+    
     # Add a case with a few items to the chain
     case_id = '65cc391d-6568-4dcc-a3f1-86a2f04140f3'
     case = Case(case_id)
