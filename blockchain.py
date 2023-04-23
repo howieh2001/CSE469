@@ -16,32 +16,28 @@ class Case:
         self.case_id = case_id
         self.items = []
 
-    def find_case(this_case):
-        for block in blockchain.get_chain():
-            if isinstance(block.data, Case):
-                case = block.data
-                for item in case.get_items():
-                    if (item['item_id'] == this_case):
-                        return case
-
     def add(self, item_ids):
+        a = False
         print(f"Case: {case_id}")
         time = datetime.datetime.now().isoformat()
-        for item in item_ids:
-            self.items.append({
-            'item_id': item,
-            'status': 'CHECKEDIN',
-            'time': time,})
-            print(f"Added item: {item}")
-            print(f"Status: CHECKEDIN")
-            print(f"Time of action: {time}")
-
+        for i in item_ids:
             for block in blockchain.get_chain():
                 if isinstance(block.data, Case):
                     case = block.data
                     for item in case.get_items():
-                        if (item['item_id'] == item):
+                        if (item['item_id'] == i):
                             print("VERIFY ISSUE: duplicate block added")
+                            a = True
+                        if a:
+                            break
+            self.items.append({
+            'item_id': i,
+            'status': 'CHECKEDIN',
+            'time': time,})
+            print(f"Added item: {i}")
+            print(f"Status: CHECKEDIN")
+            print(f"Time of action: {time}")
+
 
     def checkout(self, input_item_id):
         print(f"Case: {case_id}")
@@ -50,13 +46,14 @@ class Case:
                 case = block.data
                 for item in case.get_items():
                     if (item['item_id'] == input_item_id):
-                        if (item['status'] == "CHECKEDIN"):
+                        if (item['status'] != "CHECKEDIN"):
+                            print("Error: Cannot check out a checked out item. Must check it in first.")
+                        else:
                             item['status'] = "CHECKEDOUT"
                             print(f"Checked out item: {item['item_id']}")
                             print(f"Status: {item['status']}")
                             print(f"Time of action: {datetime.datetime.now().isoformat()}")
-                        else:
-                            print("Error: Cannot check out a checked out item. Must check it in first.")
+                        return None
 
     def checkin(self, input_item_id):
         print(f"Case: {case_id}")
@@ -70,6 +67,7 @@ class Case:
                             print(f"Checked out item: {item['item_id']}")
                             print(f"Status: {item['status']}")
                             print(f"Time of action: {datetime.datetime.now().isoformat()}")
+                        return None
     
     def remove(self, input_item_id, reason, owner_info):
         print(f"Case: {case_id}")
@@ -82,13 +80,15 @@ class Case:
                             item['status'] = reason
                             print(f"Removed item: {item['item_id']}")
                             print(f"Status: {item['status']}")
-                            if owner_info != "null":
-                                print(f"Owner info: {owner_info}")
+                            if owner_info == "null":
                                 if reason == "RELEASED":
                                     print("VERIFY ISSUE: released but no owner given")
+                            else:
+                                print(f"Owner info: {owner_info}")
                             print(f"Time of action: {datetime.datetime.now().isoformat()}")
                         else:
                             print("Error: Cannot remove out a checked out item. Must check it in first.")
+                        return None
 
     def get_items(self):
         return self.items
