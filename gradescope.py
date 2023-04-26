@@ -18,12 +18,27 @@ class Case:
         self.case_id = case_id
         self.items = []
 
-    def add_item(self, item_id):
+
+    def add(self, i):
+        a = False
+        print(f"Case: {case_id}")
+        time = datetime.datetime.now().isoformat()
+        for block in bl.get_chain():
+            if isinstance(block.data, Case):
+                case = block.data
+                for item in case.get_items():
+                    if (item['item_id'] == i):
+                        print("VERIFY ISSUE: duplicate block added")
+                        a = True
+                    if a:
+                        break
         self.items.append({
-            'item_id': item_id,
-            'status': 'CHECKEDIN',
-            'time': datetime.datetime.now().isoformat(),
-        })
+        'item_id': i,
+        'status': 'CHECKEDIN',
+        'time': time,})
+        print(f"Added item: {i}")
+        print(f"Status: CHECKEDIN")
+        print(f"Time of action: {time}")
 
     def get_items(self):
         return self.items
@@ -143,14 +158,8 @@ if __name__ == '__main__':
             case = bl.get_case(args.case_id)
             if case:
                 for item_id in args.item_id:
-                    case.add_item(item_id)
-                    bl.add_block(case)
-                    item = case.get_items()[-1]
-                    print(f"Case: {case.case_id}\nAdded item: {item['item_id']}\nStatus: {item['status']}\nTime of action: {item['time']}\n")
-            else:
-                print (f"Error: Case with ID {args.case_id} not found.")
-        else:
-            print("Error: Case ID and items ID(s) are required for 'add' command.")
+                    case.add(item_id)
+                    
 
     # 'log' command
     if args.command == 'log':
@@ -182,4 +191,3 @@ if __name__ == '__main__':
                     print(f"Item: {block.data}\n")
 
     # example use
-
